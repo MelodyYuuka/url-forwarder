@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="utf-8">
+    <link rel="icon" href="/logo.webp">
     <title>φ(>ω<*) 正在跳转链接哦~请稍后~</title>
             <style>
                 html,
@@ -187,7 +188,7 @@
         var emote = emote_list[Math.floor(Math.random() * emote_list.length)];
         loadingTime.innerHTML = emote + " 将于" + time + "秒后跳转~";
         if (time == 0) {
-            location.assign(getQueryVariable("url"));// FIXME
+            location.assign(url);
             return;
         }
         setTimeout(function () {
@@ -196,7 +197,6 @@
     }
 
     window.onload = function () {
-        url = "https://i.pixiv.re/img-original/img/2023/04/07/19/37/21/106953182_p0.jpg"
         document.getElementById("explicit-url").innerHTML = url;
         document.getElementById("jump-link").href = url;
         if (url != "") {
