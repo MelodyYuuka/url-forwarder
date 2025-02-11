@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Steam 登录成功</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 引入 Normalize.css 重置样式 -->
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/normalize/8.0.1/normalize.min.css">
+    <style>
+        body {
+            background: #F3F4F5;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droi";
+            ;
+            color: #333;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        .container {
+            background: #ffffff;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            border-radius: 18px;
+            padding: 40px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            border-top: 6px solid rgb(60, 169, 120);
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: rgb(60, 169, 120);
+        }
+
+        p {
+            font-size: 1.2em;
+            word-break: break-all;
+            color: #34495e;
+        }
+
+        .btn {
+            display: inline-block;
+            width: 150px;
+            /* 固定宽度 */
+            margin: 20px 20px 0 20px;
+            /* 上边距20px，两边间隔20px */
+            padding: 10px 20px;
+            background: rgb(60.0379746835, 169.4620253165, 120.0759493671);
+            color: #fff;
+            border: none;
+            border-radius: 18px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            font-size: 1em;
+        }
+
+        .btn:hover {
+            background: rgb(50, 150, 110);
+        }
+
+        .logo-img {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            width: 100%;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .logo-img img {
+            max-width: 6rem;
+            height: auto;
+            margin: 0;
+            margin-bottom: 1rem;
+        }
+
+        .site-name {
+            font-size: 2.3rem;
+            font-weight: 600;
+            margin: 0;
+            color: #2c3e50;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="logo-img">
+        <a href="https://bot.yunmengdu.cn">
+            <img src="logo.webp" alt="" class="vertical-center">
+        </a>
+        <a class="site-name vertical-center" href="https://bot.yunmengdu.cn">YuukaBot</a>
+    </div>
+    <div class="container">
+        <h1>登录成功</h1>
+        <p id="openid-display">正在解析返回信息……</p>
+        <button id="copy-btn" class="btn">复制 SteamID</button>
+        <button id="copy-cmd-btn" class="btn">复制绑定指令</button>
+    </div>
+    <script>
+        // 从 URL 查询字符串中获取参数
+        function getQueryParams() {
+            const params = {};
+            const queryString = window.location.search.substring(1);
+            const pairs = queryString.split("&");
+            pairs.forEach(pair => {
+                const [key, value] = pair.split("=");
+                if (key) {
+                    params[decodeURIComponent(key)] = decodeURIComponent(value || "");
+                }
+            });
+            return params;
+        }
+
+        window.addEventListener("DOMContentLoaded", () => {
+            const params = getQueryParams();
+            let openid = params["openid.claimed_id"] || "未获取到 openid";
+            openid = openid.replace("https://steamcommunity.com/openid/id/", "");
+            document.getElementById("openid-display").textContent = "你的 SteamID： " + openid;
+
+            const copyBtn = document.getElementById("copy-btn");
+            copyBtn.addEventListener("click", () => {
+                navigator.clipboard.writeText(openid).then(() => {
+                    copyBtn.textContent = "已复制";
+                    setTimeout(() => {
+                        copyBtn.textContent = "复制 SteamID";
+                    }, 2000);
+                }).catch(err => {
+                    console.error('复制失败:', err);
+                    copyBtn.textContent = "复制失败";
+                });
+            });
+
+            const copyCmdBtn = document.getElementById("copy-cmd-btn");
+            copyCmdBtn.addEventListener("click", () => {
+                navigator.clipboard.writeText("/steambind " + openid).then(() => {
+                    copyCmdBtn.textContent = "已复制";
+                    setTimeout(() => {
+                        copyCmdBtn.textContent = "复制指令";
+                    }, 2000);
+                }).catch(err => {
+                    console.error('复制失败:', err);
+                    copyCmdBtn.textContent = "复制失败";
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
